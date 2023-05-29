@@ -1,0 +1,945 @@
+bfs dfs assi 1
+This code is written in C++ and performs breadth-first search (BFS) and depth-first search (DFS) traversals on a graph. Here's an explanation of the code line by line:
+
+1. `#include<bits/stdc++.h>`: This line includes the necessary header files for the program.
+
+3. `int main()`: This is the main function where the program execution begins.
+
+5. `int n, m;`: Declares integer variables `n` and `m` to store the number of vertices and edges, respectively.
+
+7. `cout << "\nEnter number of vertices: ";`: Displays a prompt to enter the number of vertices.
+
+8. `cin >> n;`: Reads the number of vertices from the user.
+
+10. `cout << "\nEnter number of edges: ";`: Displays a prompt to enter the number of edges.
+
+11. `cin >> m;`: Reads the number of edges from the user.
+
+13. `int a[n][n];`: Declares a 2D array `a` of size `n x n` to represent the adjacency matrix of the graph.
+
+15. `cout << "\nNow enter vertex numbers between which edges are present\n";`: Displays a message to enter the vertex numbers between which edges are present.
+
+16. `int v1, v2;`: Declares integer variables `v1` and `v2` to store the vertex numbers.
+
+18. `for (int i = 0; i < m; i++)`: A loop to read the vertex numbers for each edge.
+
+20. `cout << "\nVertex :";`: Displays a prompt to enter the first vertex of an edge.
+
+21. `cin >> v1;`: Reads the first vertex number from the user.
+
+23. `cout << "\nVertex :";`: Displays a prompt to enter the second vertex of an edge.
+
+24. `cin >> v2;`: Reads the second vertex number from the user.
+
+26. `cout << "\nVertex " << v1 << " <---------> Vertex " << v2 << endl;`: Displays the vertices that are connected by an edge.
+
+28. `a[v1][v2] = 1;`: Marks the adjacency matrix at position `[v1][v2]` as 1 to indicate an edge between `v1` and `v2`.
+
+29. `a[v2][v1] = 1;`: Marks the adjacency matrix at position `[v2][v1]` as 1 to indicate an edge between `v2` and `v1` (since the graph is undirected).
+
+32. `queue<int> q;`: Declares a queue `q` of integers for BFS traversal.
+
+33. `bool v[n];`: Declares a boolean array `v` of size `n` to keep track of visited vertices.
+
+35. `for (int i = 0; i < n; i++)`: Initializes the `v` array with all elements as `false`.
+
+37. `cout << "\nEnter the root vertex: ";`: Displays a prompt to enter the root vertex for traversal.
+
+38. `cin >> m;`: Reads the root vertex from the user.
+
+40. `q.push(m);`: Pushes the root vertex into the queue.
+
+42. `cout << "\nFollowing is the BFS traversal of the provided graph:\n";`: Displays a message indicating the BFS traversal is being performed.
+
+43. `while (!q.empty())`: Loops until the queue becomes empty.
+
+45. `int x = q.front();`: Assigns the front element of the queue to the variable `x`.
+
+46. `q.pop();`: Removes the front element from the queue.
+
+47. `cout <<
+
+ x << " ";`: Displays the current vertex being visited.
+
+48. `v[x] = true;`: Marks the current vertex as visited.
+
+51. `if (a[x][i] == 1 && v[i] == false)`: Checks if there is an edge between the current vertex `x` and vertex `i`, and if `i` is not visited.
+
+53. `v[i] = true;`: Marks vertex `i` as visited.
+
+54. `q.push(i);`: Pushes vertex `i` into the queue for further exploration.
+
+58. `for (int i = 0; i < n; i++)`: Resets the `v` array with all elements as `false` for the next traversal.
+
+61. `stack<int> s;`: Declares a stack `s` of integers for DFS traversal.
+
+62. `s.push(m);`: Pushes the root vertex into the stack.
+
+64. `cout << "\n\nFollowing is the DFS traversal of the provided graph:\n";`: Displays a message indicating the DFS traversal is being performed.
+
+65. `while (!s.empty())`: Loops until the stack becomes empty.
+
+67. `int x = s.top();`: Assigns the top element of the stack to the variable `x`.
+
+68. `s.pop();`: Removes the top element from the stack.
+
+69. `cout << x << " ";`: Displays the current vertex being visited.
+
+70. `v[x] = true;`: Marks the current vertex as visited.
+
+73. `if (a[x][i] == 1 && v[i] == false)`: Checks if there is an edge between the current vertex `x` and vertex `i`, and if `i` is not visited.
+
+75. `v[i] = true;`: Marks vertex `i` as visited.
+
+76. `s.push(i);`: Pushes vertex `i` into the stack for further exploration.
+
+79. `return 1;`: Returns 1 to indicate successful program execution.
+
+This code essentially takes user input to build an adjacency matrix representing a graph, and then performs BFS and DFS traversals starting from a specified root vertex. The traversals are displayed as output.
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+assi 2
+a star 
+
+Sure! Let's go through the code line by line and explain each part:
+
+cpp
+Copy code
+#include <bits/stdc++.h>
+using namespace std;
+This is a preprocessor directive that includes the entire standard library (bits/stdc++.h) and declares that the code will use the std namespace. Including this directive is a shortcut to include commonly used headers.
+
+cpp
+Copy code
+struct Node {
+    Node* parent;
+    int mat[3][3];
+    int x, y;
+    int hscore;
+    int gscore;
+};
+This defines a structure called Node which represents a node in the puzzle. It contains information such as a pointer to the parent node, the puzzle matrix, the coordinates (x and y) of the empty space, the heuristic score (hscore), and the path cost (gscore).
+
+cpp
+Copy code
+void printMatrix(int mat[3][3]) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++)
+            cout << mat[i][j] << " ";
+        cout << "\n";
+    }
+}
+This function takes a 2D matrix and prints its contents in a 3x3 grid format.
+
+cpp
+Copy code
+Node* newNode(int mat[3][3], int x, int y, int newX, int newY, int gscore, Node* parent) {
+    Node* node = new Node;
+    node->parent = parent;
+    memcpy(node->mat, mat, sizeof node->mat);
+    swap(node->mat[x][y], node->mat[newX][newY]);
+    node->hscore = INT_MAX;
+    node->gscore = gscore;
+    node->x = newX;
+    node->y = newY;
+    return node;
+}
+This function creates a new Node with the given parameters. It allocates memory for the node, sets its parent, copies the matrix, swaps the values at the given coordinates, and initializes the heuristic score, path cost, and coordinates.
+
+cpp
+Copy code
+int row[] = {1, 0, -1, 0};
+int col[] = {0, -1, 0, 1};
+These two arrays represent the possible movements in the puzzle. row represents the row movements (down, left, up, right), and col represents the column movements.
+
+cpp
+Copy code
+int calculateCost(int initial[3][3], int final[3][3]) {
+    int count = 0;
+    for (int i = 0; i < 3; i++)
+        for (int j = 0; j < 3; j++)
+            if (initial[i][j] && initial[i][j] != final[i][j])
+                count++;
+    return count;
+}
+This function calculates the cost (number of misplaced tiles) between the initial and final puzzle configurations. It counts the number of non-zero tiles in initial that differ from the corresponding tiles in final.
+
+cpp
+Copy code
+int isSafe(int x, int y) {
+    return (x >= 0 && x < 3 && y >= 0 && y < 3);
+}
+This function checks if a given coordinate (x, y) is within the bounds of the puzzle matrix (3x3).
+
+cpp
+Copy code
+void printPath(Node* root) {
+    if (root == NULL)
+        return;
+    printPath(root->parent);
+    printMatrix(root->mat);
+    cout << "hscore: " << root->hscore << "\ngscore: " << root->gscore << "\nfscore: " << root->hscore + root->gscore << "\n\n";
+}
+This function recursively prints the path from the root node to the current node. It first calls itself with the parent of the current node to print the previous moves, then prints the matrix of the current node, and finally prints the heuristic score, path cost, and the sum of the heuristic and path cost.
+
+cpp
+Copy code
+struct comp {
+    bool operator()(const Node* lhs, const Node* rhs) const {
+        return (lhs->hscore + lhs->gscore) > (rhs->hscore + rhs->gscore);
+    }
+};
+This defines a comparison structure called comp that compares two nodes based on their sum of heuristic score and path cost. It is used for sorting nodes in the priority queue.
+
+cpp
+Copy code
+void solve(int initial[3][3], int x, int y, int final[3][3]) {
+    priority_queue<Node*, std::vector<Node*>, comp> pq;
+    Node* root = newNode(initial, x, y, x, y, 0, NULL);
+    root->hscore = calculateCost(initial, final);
+    pq.push(root);
+    while (!pq.empty()) {
+        Node* min = pq.top();
+        pq.pop();
+        if (min->hscore == 0) {
+            printPath(min);
+            return;
+        }
+        for (int i = 0; i < 4; i++) {
+            if (isSafe(min->x + row[i], min->y + col[i])) {
+                Node* child = newNode(min->mat, min->x, min->y, min->x + row[i], min->y + col[i], min->gscore + 1, min);
+                child->hscore = calculateCost(child->mat, final);
+                pq.push(child);
+            }
+        }
+    }
+}
+This function solves the puzzle using the A* algorithm. It initializes a priority queue pq that stores nodes in a sorted manner based on the comparison defined by comp. It creates the root node using the initial configuration and calculates its heuristic score. Then it enters a loop where it repeatedly pops the node with the lowest heuristic score from the priority queue. If the popped node has a heuristic score of 0 (reached the final configuration), it calls printPath to print the solution path and returns. Otherwise, it generates child nodes by moving the empty space in all possible directions, calculates their heuristic scores, and adds them to the priority queue. The loop continues until the priority queue is empty or a solution is found.
+
+cpp
+Copy code
+int main() {
+    int initial[3][3];
+    int x, y;
+
+    cout << "\n\nEnter Initial Block Structure\n\nEnter 0 for blank space:\n\n";
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            cout << "Row " << i + 1 << " Column " << j + 1 << "Element = ";
+            cin >> initial[i][j];
+            if (initial[i][j] == 0) {
+                x = i;
+                y = j;
+            }
+        }
+    }
+
+    int final[3][3];
+    cout << "\n\nEnter Final Block Structure\n\nEnter 0 for blank space:\n\n";
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            cout << "Row " << i + 1 << " Column " << j + 1 << " Element = ";
+            cin >> final[i][j];
+        }
+    }
+
+    cout << "\nInitial Structure:\n\n";
+    printMatrix(initial);
+    cout << "\nFinal Structure:\n\n";
+    printMatrix(final);
+
+    cout << "\n\nThis is the solution using A* Algorithm:\n\n";
+    solve(initial, x, y, final);
+
+    return 0;
+}
+This is the main function where the user is prompted to enter the initial and final configurations of the puzzle. It reads the input, prints the initial and final structures, and then calls the solve function to find the solution using the A* algorithm.
+
+Overall, this program implements the A* algorithm to solve a 3x3 puzzle. It calculates the number of misplaced tiles between the initial and final configurations as the heuristic score and uses a priority queue to explore the search space efficiently.
+ -----------------------------------------------------------------------------------------------------------------------------
+assi 3 
+
+selection sort
+
+
+This program implements the Selection Sort algorithm to sort an array of integers in ascending order. Let's go through the code line by line:
+
+```cpp
+#include<bits/stdc++.h>
+using namespace std;
+```
+This includes the necessary header files for input/output operations and standard template libraries.
+
+```cpp
+int main(){
+    int n;
+    vector<int> v;
+    cout<<"Enter number of elements: ";
+    cin>>n;
+    cout<<"\nEnter values: ";
+    for(int i=0;i<n;i++){
+        int x;
+        cout<<"\nElement "<<i+1<<": ";
+        cin>>x;
+        v.push_back(x);
+    }
+```
+The `main` function is the entry point of the program. It initializes variables `n` and `v`. `n` represents the number of elements in the array, and `v` is a vector used to store the array elements. The user is prompted to enter the number of elements and then enter the values for each element. The values are stored in the vector `v` using the `push_back` function.
+
+```cpp
+    int z;
+    cout<<"\nThe array you entered is: ";
+    for(int i=0;i<n;i++){
+        cout<<v[i]<<" ";
+    }
+    cout<<"\n\nPerforming Selection Sort on the given array\n";
+    for(int i=0;i<n;i++){
+        z=i;
+        for(int j=i+1;j<n;j++){
+            if(v[j]<v[z]){
+                z=j;
+            }
+        }
+        int t=v[z];
+        v[z]=v[i];
+        v[i]=t;
+    }
+```
+A variable `z` is declared to store the index of the minimum element found during each iteration. The original array is printed. Then, the Selection Sort algorithm is performed. The outer loop iterates from `i=0` to `n-1`, representing the current position where the minimum element will be placed. The inner loop finds the index of the minimum element in the unsorted part of the array and stores it in `z`. If a smaller element is found, `z` is updated. After finding the minimum element, it is swapped with the element at index `i` to place it in the correct position.
+
+```cpp
+    cout<<"\nThe sorted array is: ";
+    for(int i=0;i<n;i++){
+        cout<<v[i]<<" ";
+    }
+    return 1;
+}
+```
+Finally, the sorted array is printed, and the program returns 1 to indicate successful execution.
+
+In summary, this program takes input from the user to create an array, performs the Selection Sort algorithm on the array, and outputs the sorted array.
+
+--------------------------------------------------------------------------------------------------------------------------------------
+
+assi 4
+
+dijkstra 
+
+Sure! Let's go through the code line by line and explain each step:
+
+```c
+#include <limits.h>
+#include <stdio.h>
+#define V 9
+```
+In this section, the necessary header files `limits.h` and `stdio.h` are included. `limits.h` is included to use the constant `INT_MAX`, which represents the maximum value that an `int` variable can hold. `stdio.h` is included for standard input/output functions. The line `#define V 9` defines a macro `V` with the value `9`, which represents the number of vertices in the graph.
+
+```c
+int minDistance(int dist[], bool sptSet[]){
+	int min = INT_MAX, min_index;
+
+	for (int v = 0; v < V; v++){
+		if (sptSet[v] == false && dist[v] <= min){
+			min = dist[v], min_index = v;
+        }
+    }
+	return min_index;
+}
+```
+This function `minDistance` is used to find the vertex with the minimum distance value from the set of vertices not yet included in the shortest path tree (sptSet). It takes two arguments: `dist[]`, an array that represents the distance of vertices from the source vertex, and `sptSet[]`, a boolean array that indicates whether a vertex is included in the shortest path tree or not. It iterates over all the vertices and checks if the vertex is not in the shortest path tree (`sptSet[v] == false`) and its distance is less than or equal to the current minimum distance (`dist[v] <= min`). If so, it updates the minimum distance and the corresponding index.
+
+```c
+int printSolution(int dist[], int n){
+	printf("Vertex Distance from Source\n");
+	for (int i = 0; i < V; i++){
+		printf("%d \t\t %d\n", i, dist[i]);
+    }
+}
+```
+This function `printSolution` is used to print the final distances of vertices from the source vertex. It takes two arguments: `dist[]`, the array of distances, and `n`, the number of vertices. It simply prints the vertex and its corresponding distance using a `printf` statement.
+
+```c
+void dijkstra(int graph[V][V], int src){
+	int dist[V];
+	bool sptSet[V];
+
+	for (int i = 0; i < V; i++){
+		dist[i] = INT_MAX, sptSet[i] = false;
+    }
+	dist[src] = 0;
+```
+The `dijkstra` function implements Dijkstra's algorithm to find the shortest path from a given source vertex (`src`) to all other vertices in the graph. It takes two arguments: `graph[][]`, a 2D array representing the weighted graph, and `src`, the source vertex from which the shortest paths are calculated.
+
+In the beginning, two arrays `dist[]` and `sptSet[]` are initialized. `dist[]` stores the shortest distance from the source vertex to each vertex, and `sptSet[]` is a boolean array to track which vertices are included in the shortest path tree. The initial values for `dist[]` are set to `INT_MAX` (infinite distance) for all vertices except the source vertex, which is set to 0. All vertices in `sptSet[]` are initialized as `false`.
+
+```c
+	for (int count = 0; count < V - 1; count++) {
+		int u = minDistance(dist, sptSet);
+		sptSet[u] = true;
+		for (int v = 0; v < V; v++){
+			if (!sptSet[v]
+
+ && graph[u][v] && dist[u] != INT_MAX && dist[u] + graph[u][v] < dist[v]){
+				dist[v] = dist[u] + graph[u][v];
+            }
+        }
+	}
+	printSolution(dist, V);
+}
+```
+In the main part of the `dijkstra` function, a loop runs for `V-1` times. In each iteration, it selects the vertex `u` with the minimum distance value from the set of vertices not yet included in the shortest path tree using the `minDistance` function. The selected vertex is marked as visited (`sptSet[u] = true`).
+
+Then, it updates the distance values of the adjacent vertices of `u` if the following conditions are met:
+- The vertex `v` is not yet included in the shortest path tree (`!sptSet[v]`).
+- There is an edge between `u` and `v` in the graph (`graph[u][v] != 0`).
+- The current distance value of `u` is not `INT_MAX` (i.e., it is reachable).
+- The distance through `u` to `v` is shorter than the current distance value of `v`. If so, it updates the distance value of `v` to `dist[u] + graph[u][v]`.
+
+After the loop completes, the `printSolution` function is called to print the calculated distances of all vertices from the source vertex.
+
+```c
+int main(){
+	int graph[V][V] = { 
+        { 0, 4, 0, 0, 0, 0, 0, 8, 0 },
+		{ 4, 0, 8, 0, 0, 0, 0, 1, 0 },
+		{ 0, 8, 0, 7, 0, 4, 0, 0, 2 },
+		{ 0, 0, 7, 0, 9, 4, 0, 0, 0 },
+		{ 0, 0, 0, 9, 0, 1, 0, 0, 0 },
+		{ 0, 0, 4, 4, 1, 0, 2, 0, 0 },
+		{ 0, 0, 0, 0, 0, 2, 0, 1, 6 },
+		{ 8, 1, 0, 0, 0, 0, 1, 0, 7 },
+		{ 0, 0, 2, 0, 0, 0, 6, 7, 0 } 
+    };
+
+	dijkstra(graph, 0);
+	return 0;
+}
+```
+In the `main` function, an example graph is defined using a 2D array `graph[][]`. The numbers in the array represent the weights of the edges between the vertices. A value of 0 indicates no edge between the vertices. The graph shown in the code is a weighted graph with 9 vertices.
+
+The `dijkstra` function is called with the `graph` and the source vertex `0`. This will calculate and print the shortest path distances from vertex 0 to all other vertices in the graph.
+
+Finally, the `main` function returns 0 to indicate successful execution of the program.
+-----------------------------------------------------------------------------------------------------------
+assi 5
+
+prims algo:
+
+Certainly! Let's go through the code line by line and explain each step:
+
+```c
+#include <bits/stdc++.h>
+using namespace std;
+```
+This code includes the necessary header files for the program. The `bits/stdc++.h` header includes most of the standard C++ libraries, making it more convenient by including commonly used headers in one go.
+
+```c
+#define V 5
+```
+This line defines a macro `V` which represents the number of vertices in the graph. In this case, `V` is set to 5.
+
+```c
+int minKey(int key[], bool mstSet[]){
+	int min = INT_MAX, min_index;
+
+	for (int v = 0; v < V; v++){
+		if (mstSet[v] == false && key[v] < min){
+			min = key[v], min_index = v;
+        }
+    }
+	return min_index;
+}
+```
+The `minKey` function is used to find the vertex with the minimum key value from the set of vertices not yet included in the Minimum Spanning Tree (MST). It takes an array `key[]` and a boolean array `mstSet[]` as input. It iterates through all the vertices and checks if the vertex is not part of the MST (`mstSet[v] == false`) and if its key value is less than the current minimum. If these conditions are met, it updates the minimum and the corresponding index. Finally, it returns the index of the vertex with the minimum key.
+
+```c
+void printMST(int parent[], int graph[V][V]){
+	cout << "Edge \tWeight\n";
+	for (int i = 1; i < V; i++){
+		cout << parent[i] << " - " << i << " \t" << graph[i][parent[i]] << " \n";
+    }
+}
+```
+The `printMST` function is used to print the Minimum Spanning Tree (MST) found by Prim's algorithm. It takes an array `parent[]` and a 2D graph array `graph[][]` as input. It iterates through all the vertices (starting from index 1) and prints the edges of the MST along with their weights. The `parent[i]` represents the parent vertex of vertex `i` in the MST. It prints the edge as `parent[i] - i` and the weight as `graph[i][parent[i]]`.
+
+```c
+void primMST(int graph[V][V]){
+	int parent[V];
+	int key[V];
+	bool mstSet[V];
+
+	for (int i = 0; i < V; i++){
+		key[i] = INT_MAX, mstSet[i] = false;
+    }
+	key[0] = 0;
+	parent[0] = -1;
+
+	for (int count = 0; count < V - 1; count++) {
+		int u = minKey(key, mstSet);
+		mstSet[u] = true;
+		for (int v = 0; v < V; v++){
+			if (graph[u][v] && mstSet[v] == false && graph[u][v] < key[v]){
+                parent[v] = u, key[v] = graph[u][v];
+            }
+        }
+	}
+	printMST(parent, graph);
+}
+```
+The `primMST` function implements Prim's algorithm to find the Minimum Spanning Tree (MST) of the graph. It takes a 2D graph array `graph[][]` as input.
+
+It initializes three arrays: `parent[]` to store the parent of each vertex in the MST, `key[]` to store the key value of each vertex (initialized to
+
+ a large value except for the first vertex, which is set to 0), and `mstSet[]` to track the inclusion of vertices in the MST (initialized as `false` for all vertices).
+
+The function then proceeds with the main loop that runs `V-1` times (as the MST will have `V-1` edges). In each iteration, it finds the vertex `u` with the minimum key value using the `minKey` function. It marks `u` as part of the MST by setting `mstSet[u]` to `true`.
+
+Then, it checks all the adjacent vertices `v` of `u` and updates their key values and parent vertices if necessary. If vertex `v` is not part of the MST (`mstSet[v] == false`), there is an edge between `u` and `v` (`graph[u][v] != 0`), and the weight of the edge is less than the current key value of `v`, it updates the key value of `v` to the weight of the edge and sets the parent of `v` to `u`.
+
+After the loop, it calls the `printMST` function to print the MST using the `parent[]` and `graph[][]` arrays.
+
+```c
+int main(){
+	int graph[V][V] = { 
+        { 0, 2, 0, 6, 0 },
+		{ 2, 0, 3, 8, 5 },
+		{ 0, 3, 0, 0, 7 },
+		{ 6, 8, 0, 0, 9 },
+		{ 0, 5, 7, 9, 0 } 
+    };
+
+	primMST(graph);
+	return 0;
+}
+```
+In the `main` function, a 2D array `graph[][]` is defined, representing the weighted adjacency matrix of the graph. It contains the weights of the edges connecting the vertices. The graph in this example has 5 vertices.
+
+The `primMST` function is then called on the `graph` to find and print the Minimum Spanning Tree (MST) of the graph.
+
+Finally, the program returns 0 to indicate successful execution.
+
+--------------------------------------------------------------------------------------------------------------------
+assi 6
+
+kruskals explanation:
+
+Sure! Let's go through the code line by line and explain each step:
+
+```c
+#include <bits/stdc++.h>
+using namespace std;
+```
+This code includes the necessary header files for the program. The `bits/stdc++.h` header includes most of the standard C++ libraries, making it more convenient by including commonly used headers in one go.
+
+```c
+class DSU {
+	int* parent;
+	int* rank;
+
+public:
+	DSU(int n){
+		parent = new int[n];
+		rank = new int[n];
+
+		for (int i = 0; i < n; i++) {
+			parent[i] = -1;
+			rank[i] = 1;
+		}
+	}
+```
+This code defines a class `DSU` (Disjoint Set Union) for implementing the Disjoint Set data structure. It has two private member variables: `parent` and `rank`. The constructor `DSU(int n)` initializes the `parent` and `rank` arrays. The `parent` array holds the parent of each element in the set, and the `rank` array represents the rank or size of each set. Initially, each element is its own parent, and the rank is set to 1.
+
+```c
+	int find(int i)
+	{
+		if (parent[i] == -1)
+			return i;
+
+		return parent[i] = find(parent[i]);
+	}
+```
+The `find` function is used to find the representative (root) of the set to which the element `i` belongs. It uses the path compression technique to optimize subsequent find operations. If `parent[i]` is `-1`, it means `i` is the representative, and it returns `i`. Otherwise, it recursively finds the representative and updates the `parent[i]` to the found representative for future use.
+
+```c
+	void unite(int x, int y){
+		int s1 = find(x);
+		int s2 = find(y);
+
+		if (s1 != s2) {
+			if (rank[s1] < rank[s2]) {
+				parent[s1] = s2;
+			}
+			else if (rank[s1] > rank[s2]) {
+				parent[s2] = s1;
+			}
+			else {
+				parent[s2] = s1;
+				rank[s1] += 1;
+			}
+		}
+	}
+```
+The `unite` function is used to unite (merge) two sets. It takes the elements `x` and `y` and finds their respective representatives using the `find` function. If the representatives are different, it compares the ranks of the sets. If the rank of `s1` is less than the rank of `s2`, it makes `s2` the parent of `s1`. If the rank of `s1` is greater than the rank of `s2`, it makes `s1` the parent of `s2`. If the ranks are the same, it makes `s1` the parent of `s2` and increments the rank of `s1` by 1.
+
+```c
+class Graph {
+	vector<vector<int> > edgelist;
+	int V;
+
+public:
+	Graph(int V) { this->V = V; }
+	void addEdge(int x, int y, int w){
+		edgelist.push_back({ w, x, y });
+	}
+```
+The `Graph` class is used to represent a graph. It has two private member variables: `edgelist` and `V`. The `edgelist` is a vector of vectors that holds the edges of the graph along with their weights. Each edge is represented as
+
+ a vector of three integers: weight, vertex x, and vertex y. The `V` variable represents the number of vertices in the graph. The constructor `Graph(int V)` initializes the number of vertices.
+
+The `addEdge` function is used to add an edge to the `edgelist`. It takes the vertices `x` and `y` along with the weight `w` and adds them as a vector to the `edgelist`.
+
+```c
+	void kruskals_mst(){
+		sort(edgelist.begin(), edgelist.end());
+
+		DSU s(V);
+		int ans = 0;
+		cout << "Following are the edges in the "
+				"constructed MST"
+			<< endl;
+		for (auto edge : edgelist) {
+			int w = edge[0];
+			int x = edge[1];
+			int y = edge[2];
+
+			if (s.find(x) != s.find(y)) {
+				s.unite(x, y);
+				ans += w;
+				cout << x << " -- " << y << " == " << w
+					<< endl;
+			}
+		}
+		cout << "Minimum Cost Spanning Tree: " << ans;
+	}
+};
+```
+The `kruskals_mst` function implements Kruskal's algorithm to find the Minimum Spanning Tree (MST) of the graph. It begins by sorting the `edgelist` in ascending order based on the edge weights using `std::sort`. Then, it creates an instance of the `DSU` class named `s` with the number of vertices `V`.
+
+It initializes a variable `ans` to store the total weight of the MST. It then iterates through each edge in the sorted `edgelist`. For each edge, it extracts the weight, vertices `x` and `y`. It checks if the representatives (roots) of `x` and `y` in the disjoint sets are different. If they are different, it means adding this edge to the MST does not create a cycle. So, it performs the union of the sets using the `unite` function, updates the `ans` by adding the weight of the current edge, and prints the edge details.
+
+Finally, it prints the total weight of the MST.
+
+```c
+int main(){
+	Graph g(4);
+	g.addEdge(0, 1, 10);
+	g.addEdge(1, 3, 15);
+	g.addEdge(2, 3, 4);
+	g.addEdge(2, 0, 6);
+	g.addEdge(0, 3, 5);
+
+	g.kruskals_mst();
+	return 0;
+}
+```
+In the `main` function, an instance of the `Graph` class is created with 4 vertices. Then, edges with their weights are added to the graph using the `addEdge` function. These edges represent a sample graph.
+
+Finally, the `kruskals_mst` function is called on the `Graph` object `g` to find and print the Minimum Spanning Tree.
+
+The program returns 0 to indicate successful execution.
+
+-----------------------------------------------------------------------------------------------------------------------------
+assi 7 colour graph
+
+Certainly! Let's go through the code step by step and explain each line:
+
+```java
+public class MyClassjava {
+```
+This is the start of the Java class definition.
+
+```java
+static int V = 4;
+```
+This line defines a static variable `V` that represents the number of vertices in the graph. In this case, it is set to 4.
+
+```java
+static void printSolution(int[] color) {
+    System.out.println("Solution Exists: Following are the assigned colors ");
+    for (int i = 0; i < V; i++)
+        System.out.print(" " + color[i]);
+    System.out.println();
+}
+```
+This function takes an array `color` as input and prints the assigned colors for each vertex in the graph.
+
+```java
+static boolean isSafe(boolean[][] graph, int[] color) {
+    for (int i = 0; i < V; i++)
+        for (int j = i + 1; j < V; j++)
+            if (graph[i][j] && color[j] == color[i])
+                return false;
+    return true;
+}
+```
+This function checks if the coloring of the graph is safe. It iterates over all edges in the graph and checks if adjacent vertices have the same color. If any adjacent vertices have the same color, it returns `false`. Otherwise, it returns `true`, indicating that the coloring is safe.
+
+```java
+static boolean graphColoring(boolean[][] graph, int m, int i, int[] color) {
+    if (i == V) {
+        if (isSafe(graph, color)) {
+            printSolution(color);
+            return true;
+        }
+        return false;
+    }
+    for (int j = 1; j <= m; j++) {
+        color[i] = j;
+        if (graphColoring(graph, m, i + 1, color))
+            return true;
+        color[i] = 0;
+    }
+    return false;
+}
+```
+This is the main function that solves the graph coloring problem using backtracking and recursion. It takes the graph, the number of colors (`m`), the current vertex index (`i`), and the color array (`color`) as input.
+
+- If `i` reaches the number of vertices (`V`), it checks if the current coloring is safe using the `isSafe` function. If the coloring is safe, it prints the solution using the `printSolution` function and returns `true`. Otherwise, it returns `false`.
+- If `i` is less than `V`, it iterates over all possible colors from 1 to `m` and assigns each color to the current vertex (`color[i] = j`). It then makes a recursive call to `graphColoring` with the next vertex (`i + 1`) and checks if it returns `true`. If it does, it means a solution is found and it returns `true`. If not, it resets the color of the current vertex to 0 (`color[i] = 0`) and continues to the next iteration.
+- If all iterations are exhausted and no solution is found, it returns `false`.
+
+```java
+public static void main(String[] args) {
+    boolean[][] graph = {
+        { false, true, true, true },
+        { true, false, true, false },
+        { true, true, false, true },
+        { true, false, true, false },
+    };
+    int m = 3; // Number of colors
+    int[] color = new int[V];
+    for (int i = 0; i < V; i++)
+        color[i] = 0;
+    if (!graphColoring(graph, m, 0
+
+, color))
+        System.out.println("Solution does not exist");
+}
+```
+This is the main function of the program. It creates a graph represented by a 2D boolean array `graph` where `true` indicates an edge between two vertices. It sets the number of colors (`m`) to 3. Then, it initializes the color array with all elements set to 0. Finally, it calls the `graphColoring` function with the graph, number of colors, initial vertex index (0), and the color array. If no solution is found, it prints a message indicating that a solution does not exist.
+
+That's the explanation of each line in the provided code. If you have any further questions, feel free to ask!
+
+
+---------------------------------------------------------------------------------------------------------------------------------
+assi 8
+
+n queens
+
+Certainly! Let's go through the code line by line and explain each step:
+
+```c
+#include <bits/stdc++.h>
+using namespace std;
+```
+This code includes the necessary header files for the program. The `bits/stdc++.h` header includes most of the standard C++ libraries, making it more convenient by including commonly used headers in one go.
+
+```c
+bool isValid(vector<vector<int>> &grid, int row, int col){
+    int i = col;
+    while (i >= 0){
+        if (grid[row][i] == 1){
+            return false;
+        }
+        i--;
+    }
+    i = row;
+    int j = col;
+    while (i >= 0 && j >= 0){
+        if (grid[i][j] == 1){
+            return false;
+        }
+        i--;
+        j--;
+    }
+    i = row;
+    j = col;
+    while (i < grid.size() && j >= 0){
+        if (grid[i][j] == 1){
+            return false;
+        }
+        i++;
+        j--;
+    }
+    return true;
+}
+```
+The `isValid` function checks whether it is valid to place a queen at a specific position `(row, col)` in the `grid`. It takes a reference to a 2D vector `grid`, representing the current state of the chessboard, and the coordinates `(row, col)` as input.
+
+The function checks three conditions to determine the validity of placing a queen:
+1. It checks if there is any queen present in the same row to the left (`col` index decreasing) of the current position. If so, it returns `false`.
+2. It checks if there is any queen present in the upper-left diagonal of the current position. It iterates upwards (`row` index decreasing) and to the left (`col` index decreasing) until it reaches the first row or column. If it finds a queen in any of these positions, it returns `false`.
+3. It checks if there is any queen present in the lower-left diagonal of the current position. It iterates downwards (`row` index increasing) and to the left (`col` index decreasing) until it reaches the last row or the first column. If it finds a queen in any of these positions, it returns `false`.
+
+If none of the above conditions are violated, it returns `true`, indicating that it is valid to place a queen at the given position.
+
+```c
+bool placeQueens(vector<vector<int>> &grid, int n){
+    if (n >= grid.size())
+        return true;
+    for (int i = 0; i < grid.size(); i++){
+        if (isValid(grid, i, n)){
+            grid[i][n] = 1;
+            if (placeQueens(grid, n + 1)){
+                return true;
+            }
+            grid[i][n] = 0;
+        }
+    }
+    return false;
+}
+```
+The `placeQueens` function uses backtracking to find a valid configuration for placing `n` queens on an `n x n` chessboard. It takes a reference to a 2D vector `grid` and the current column index `n` as input.
+
+If the value of `n` is greater than or equal to the size of the `grid`, it means all queens have been successfully placed, and it returns `true`, indicating a valid configuration.
+
+The function uses a loop to iterate through all possible rows in the current column (`n`). For each row, it checks if it is valid to place a queen at the current position `(i, n)` using the `isValid` function. If it is valid, it sets `grid[i][n]
+
+` to 1, indicating the placement of a queen at that position.
+
+Then, it recursively calls `placeQueens` with the next column (`n + 1`). If this recursive call returns `true`, it means a valid configuration has been found, and the function returns `true`.
+
+If the recursive call returns `false`, it means the current configuration is not valid. In that case, it resets the position `(i, n)` by setting `grid[i][n]` back to 0 and continues with the next row in the loop.
+
+If all rows have been checked without finding a valid configuration, the function returns `false`.
+
+```c
+void display(vector<vector<int>> &grid){
+    for (int i = 0; i < grid.size(); i++){
+        for (int j = 0; j < grid.size(); j++){
+            if (grid[i][j]){
+                cout << "Q ";
+            }
+            else{
+                cout << ". ";
+            }
+        }
+        cout << endl;
+    }
+}
+```
+The `display` function is used to print the final configuration of the chessboard. It takes a reference to a 2D vector `grid` as input.
+
+It iterates through each cell of the `grid` and prints a "Q" if there is a queen at that position (`grid[i][j] == 1`), and a dot (".") if there is no queen (`grid[i][j] == 0`).
+
+```c
+int main(){
+    int n;
+    cout << "Enter the value of n : ";
+    cin >> n;
+
+    vector<vector<int>> grid(n, vector<int>(n, 0));
+    placeQueens(grid, 0);
+    display(grid);
+    return 0;
+}
+```
+The `main` function is the entry point of the program. It prompts the user to enter the value of `n`, representing the size of the chessboard.
+
+It creates a 2D vector `grid` of size `n x n` and initializes all cells to 0, indicating that there are no queens placed initially.
+
+Then, it calls the `placeQueens` function with `grid` and the starting column index 0 to find a valid configuration for placing `n` queens.
+
+Finally, it calls the `display` function to print the final configuration of the chessboard.
+
+The program then returns 0 to indicate successful execution.
+
+That's the explanation of each line in the provided code. Let me know if you have any further questions!
+-------------------------------------------------------------------------------------------------------------------------
+assi 9
+
+chatbot
+
+Certainly! Let's go through the code line by line and explain each step:
+
+```c++
+#include<bits/stdc++.h>
+using namespace std;
+```
+This code includes the necessary header files for the program. The `bits/stdc++.h` header includes most of the standard C++ libraries, making it more convenient by including commonly used headers in one go.
+
+```c++
+int main()
+{
+    map<string,string> m;
+    m["Hello"]="How may I help you?";
+    m["Hi"]="How may I help you?";
+    m["How are you?"]="I am good what about you?";
+    m["I am fine."]="Thats great! How may I help you?";
+
+    m["Recharge plans"]="There are some popular combo plans:\nRs 299 ------------>  Unlimited calls + 1.5gb data/day for 28 days\nRs 799 ------------>  Unlimited calls + 1.5gb data/day for 84 days \nRs 399 ------------>  Unlimited calls + 2.5gb data/day for 28 days \nRs 499 ------------>  Unlimited calls + 3gb data/day for 28 days";
+
+    m["Data plans"]="There are some popular data plans:\nRs 151 ------------>  8 gb for 28 days\nRs 108 ------------>  6 gb for 15 days\nRs 58 ------------>  3 gb for 28 days\nRs 38 ------------>  3 gb for 18 days";
+
+    m["Validity plans"]="There are some plans:\nRs 99 ------------> Rs 99 talktime + 200 mb for 28 days\nRs 279 ------------> Rs 279 talktime + 500 mb for 90 days\nRs 107 ------------> Rs 107 talktime + 200 mb for 28 days\nRs 111 ------------> Rs 111 talktime + 100 mb for 31 days";
+    
+    m["Yearly plan"]="There are some yearly plans:\nRs 2099 ------------>  Unlimited calls + 3gb data/day for 365 days\nRs 1899 ------------>  Unlimited calls + 2.5gb data/day for 365 days\nRs 1799 ------------>  Unlimited calls + 1.5gb data/day for 3658 days";
+
+    m["Thank you"]="Welcome";
+    string s;
+    cout<<"\nEnter something to talk with chatbot\n";
+    while(true)
+    {
+        cout<<"\nYou : ";
+        getline(cin,s);
+        if(s=="quit"||s=="Quit"||s=="Exit"||s=="exit")
+        {
+            cout<<"\nChatbot: Thank you...";
+            return 1;
+        }
+        if(m.find(s)==m.end()||s=="")
+        {
+            cout<<"\nChatbot : Sorry for inconvenience I can only answer:\n Recharge plans\nYearly plans\nData Plans\nValidity plans";
+        }
+        else
+        {
+            cout<<"\nChatbot : "<<m[s]<<endl;
+        }
+    }
+}
+```
+The `main` function is the entry point of the program. It implements a simple chatbot that responds to user inputs. Let's break down the code within the `main` function:
+
+1. It defines a `map` named `m` with key-value pairs. The keys represent user inputs or queries, and the values represent the corresponding responses from the chatbot.
+
+2. It populates the `map` with various key-value pairs representing different queries and their responses. For example, if the user enters "Hello," the chatbot responds with "How may I help you?"
+
+3. It declares a string variable `s` to store the user's input
+
+.
+
+4. It prompts the user to enter something to talk with the chatbot.
+
+5. The program enters an infinite loop to keep the chatbot running.
+
+6. Inside the loop, it displays "You: " to indicate the user's prompt.
+
+7. It reads the user's input using `getline` and stores it in the `s` variable.
+
+8. If the user enters "quit" or "Quit" or "Exit" or "exit," the program prints "Chatbot: Thank you..." and exits the program.
+
+9. If the user's input is not found in the `map` (`m.find(s) == m.end()`) or if the input is empty (`s == ""`), it prints a message indicating that the chatbot can only answer specific queries related to recharge plans, yearly plans, data plans, and validity plans.
+
+10. If the user's input is found in the `map`, it retrieves the corresponding response from the `map` using `m[s]` and prints it as "Chatbot: <response>".
+
+This loop continues until the user decides to exit the program.
+
+That's the explanation of each line in the provided code. Let me know if you have any further questions!
+
+
+
+
+
+
+
+
